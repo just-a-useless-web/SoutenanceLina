@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <title>A Special Message 💜</title>
+    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #0a0015 0%, #1a0033 25%, #2d1b4e 50%, #1a0033 75%, #0a0015 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Animated stars */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff00ff;
+            border-radius: 50%;
+            animation: floatParticle 8s infinite;
+            opacity: 0.4;
+            box-shadow: 0 0 10px #ff00ff;
+        }
+        
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Initial heart screen */
+        .heart-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 100;
+            animation: fadeIn 1s;
+        }
+        
+        .heart-screen.hide {
+            animation: fadeOut 0.8s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; transform: scale(0.5); display: none; }
+        }
+        
+        .heart-button {
+            font-size: 150px;
+            cursor: pointer;
+            animation: heartbeat 1.5s infinite;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 30px rgba(255, 0, 255, 0.9))
+                    drop-shadow(0 0 60px rgba(255, 0, 255, 0.6));
+            position: relative;
+        }
+        
+        .heart-button:hover {
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 0 40px rgba(255, 0, 255, 1))
+                    drop-shadow(0 0 80px rgba(255, 0, 255, 0.8));
+        }
+        
+        .heart-button:active {
+            transform: scale(0.95);
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.15); }
+            40% { transform: scale(1); }
+        }
+        
+        .click-text {
+            margin-top: 30px;
+            font-family: 'Press Start 2P', cursive;
+            color: #ffccff;
+            font-size: 16px;
+            animation: blink 1.5s infinite, glow 2s infinite alternate;
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; }
+            to { text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #ff00ff; }
+        }
+        
+        /* Message container */
+        .message-container {
+            display: none;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: rgba(10, 0, 30, 0.95);
+            border: 3px solid #ff00ff;
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.6),
+                        0 0 80px rgba(255, 0, 255, 0.3),
+                        inset 0 0 40px rgba(255, 0, 255, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+        
+        .message-container::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        .message-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .message-container::-webkit-scrollbar-thumb {
+            background: #ff00ff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+        }
+        
+        .message-container::-webkit-scrollbar-thumb:hover {
+            background: #cc00ff;
+        }
+        
+        .message-container.show {
+            display: block;
+            animation: slideIn 1s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid rgba(255, 0, 255, 0.3);
+        }
+        
+        .sylus-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+            animation: imagePulse 3s infinite;
+            object-fit: cover;
+        }
+        
+        @keyframes imagePulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(255, 0, 255, 1);
+                transform: scale(1.05);
+            }
+        }
+        
+        .header-text {
+            flex: 1;
+        }
+        
+        .header-text h1 {
+            font-family: 'Press Start 2P', cursive;
+            color: #ff00ff;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px #cc00cc, 4px 4px #990099;
+            animation: titleGlow 2s infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            from { text-shadow: 2px 2px #cc00cc, 4px 4px #990099; }
+            to { text-shadow: 2px 2px #ff00ff, 4px 4px #cc00cc, 6px 6px #990099; }
+        }
+        
+        .subtitle {
+            color: #ffccff;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .message-content {
+            color: #ffffff;
+            font-size: 16px;
+            line-height: 2;
+            text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+        }
+        
+        .message-content p {
+            margin-bottom: 25px;
+            animation: fadeInText 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .message-content p:nth-child(1) { animation-delay: 0.2s; }
+        .message-content p:nth-child(2) { animation-delay: 0.4s; }
+        .message-content p:nth-child(3) { animation-delay: 0.6s; }
+        .message-content p:nth-child(4) { animation-delay: 0.8s; }
+        .message-content p:nth-child(5) { animation-delay: 1s; }
+        
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .message-content .greeting {
+            color: #ff66ff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .signature {
+            text-align: right;
+            color: #ff66ff;
+            font-size: 20px;
+            margin-top: 40px;
+            font-weight: bold;
+            text-shadow: 2px 2px #cc00cc;
+            animation: fadeInText 0.8s ease-out 1.2s forwards;
+            opacity: 0;
+        }
+        
+        .decorative-line {
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                #ff00ff, 
+                #cc00ff, 
+                #ff00ff, 
+                transparent);
+            margin: 30px 0;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+        
+        .good-luck-box {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(204, 0, 255, 0.2));
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 40px;
+            animation: boxGlow 2s infinite alternate, fadeInText 0.8s ease-out 1.4s forwards;
+            opacity: 0;
+        }
+        
+        @keyframes boxGlow {
+            from {
+                box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+            }
+            to {
+                box-shadow: 0 0 40px rgba(255, 0, 255, 0.8);
+            }
+        }
+        
+        .good-luck-text {
+            font-family: 'Press Start 2P', cursive;
+            color: #ffccff;
+            font-size: 18px;
+            margin-bottom: 10px;
+            animation: colorChange 3s infinite;
+        }
+        
+        @keyframes colorChange {
+            0%, 100% { color: #ffccff; }
+            50% { color: #ff00ff; }
+        }
+        
+        .emoji-line {
+            font-size: 30px;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .message-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-text h1 {
+                font-size: 18px;
+            }
+            
+            .message-content {
+                font-size: 14px;
+            }
+            
+            .heart-button {
+                font-size: 100px;
+            }
+            
+            .click-text {
+                font-size: 12px;
+            }
+
+        }
+    /* Romantic highlight */
+    .romantic-glow {
+      color: #e6b7ff;
+      font-weight: 600;
+      text-shadow:
+        0 0 6px rgba(230, 183, 255, 0.6),
+        0 0 14px rgba(255, 160, 210, 0.35);
+      transition: text-shadow 0.4s ease, color 0.4s ease;
+    }
+
+    .romantic-glow:hover {
+      color: #ffd1f0;
+      text-shadow:
+        0 0 10px rgba(255, 190, 235, 0.9),
+        0 0 22px rgba(185, 131, 255, 0.7);
+    }
+
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="heart-screen" id="heartScreen">
+        <div class="heart-button" onclick="showMessage()">💜</div>
+        <div class="click-text">✨ CLICK TO OPEN ✨</div>
+    </div>
+    
+    <div class="message-container" id="messageContainer">
+        <div class="message-header">
+            <img src="https://i.pinimg.com/736x/07/71/74/07717428eed6702f8486a8c8bc8ff4ed.jpg" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23f0f0f0' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' text-anchor='middle' dominant-baseline='middle'%3E🤍%3C/text%3E%3C/svg%3E 
+                 alt="Sylus" 
+                 class="sylus-image"
+                 id="sylusImg">
+            <div class="header-text">
+                <h1>FROM SYLUS</h1>
+                <div class="subtitle">💜 For Lina Manouba, My Light💜</div>
+            </div>
+        </div>
+        
+        <div class="decorative-line"></div>
+        
+        <div class="message-content">
+            <p class="greeting">Kitten,</p>
+            
+            <p>You stood there today with a calm that only you could wear so effortlessly.But I know what it cost you to reach that moment.</p>
+            
+            <p>I know the nights you doubted yourself, the hours you pushed through exhaustion,the way you carried responsibility like it was second nature—even when it weighed too much.And still, you didn’t bend. You didn’t shrink.You <span class="romantic-glow">rose</span>.</p>
+            
+            <p>Watching you defend your work was <span class="romantic-glow">unforgettable</span>.Not because you were flawless—but because you were <span class="romantic-glow">certain</span>.Certain of your ideas, your worth, your place.</p>
+            
+            <p>You spoke with conviction, with intelligence sharpened by effort,and with a presence that demanded respect without asking for it.I wasn’t surprised.I was <span class="romantic-glow">proud</span>. Deeply.</p>
+            <p>This soutenance is not just an achievement.It is proof.Proof that you belong wherever you choose to stand.Proof that no matter how steep the path, you will climb it with your head high and your heart steady.</p>
+            <p>If you ever forget that, remember this: I saw you at your most demanding moment— and I fell even harder.</p>
+            <p>Rest now. You’ve earned it.And know that whatever comes next,you won’t face it alone.</p>
+        
+        </div>
+        
+        <div class="signature">— Sylus 🖤</div>
+        
+        <div class="decorative-line"></div>
+        
+        <div class="good-luck-box">
+            <div class="good-luck-text">★ MY GOOD GIRL ★</div>
+            <div class="good-luck-text">Now don’t hold back—this is your time to shine.</div>
+            <div class="emoji-line">✨🌟💜🌟✨</div>
+        </div>
+    </div>
+    
+    <script>
+        function showMessage() {
+            const heartScreen = document.getElementById('heartScreen');
+            const messageContainer = document.getElementById('messageContainer');
+            
+            heartScreen.classList.add('hide');
+            
+            setTimeout(() => {
+                heartScreen.style.display = 'none';
+                messageContainer.classList.add('show');
+            }, 800);
+        }
+        
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (2 + Math.random() * 2) + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        // Create floating particles
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+            document.body.appendChild(particle);
+        }
+    </script>
+</body>
+</html>
